@@ -1,0 +1,38 @@
+'''
+Will March 20058027
+All work is mine
+'''
+
+class Set:
+    def __init__(self, elements, sum):
+        self.elements = elements
+        self.sum = sum
+
+empty_set = Set([], 0)
+
+def bfi_subset_sums(s, k, n):
+    subsets = []
+    subsets.append(empty_set)
+    for i in range(n):
+        new_subsets = []
+        for old_u in subsets:
+            add = old_u.elements.copy()
+            again = old_u.sum + s[i]
+            add.append(s[i])
+            new_u = Set(add, again)
+            if (new_u.sum == (k)):
+                print (new_u.elements)
+                return
+            else:
+                new_subsets.append(old_u)
+                new_subsets.append(new_u)
+        subsets = new_subsets
+    print ("None Found")
+    return
+
+
+
+s = [1, 3, 5, 7, 4, 2]
+n = 7
+k = 17
+bfi_subset_sums(s,k,n)
