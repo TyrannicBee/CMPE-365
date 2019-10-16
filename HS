@@ -1,0 +1,92 @@
+
+class Set:
+    def __init__(self, elements, sum):
+        self.elements = elements
+        self.sum = sum
+
+
+
+
+def hs_subset_sums(s, k, n):
+    half = int(n / 2)
+    Lelements = s[:half]
+    Relements = s[half:]
+    Lsum = 0
+    Rsum = 0
+    for i in Lelements:
+        Lsum += i
+    for i in Relements:
+        Rsum += i
+    S_left = Set(Lelements, Lsum)
+    S_right = Set(Relements, Rsum)
+    Subsets_Left = subset_sums(S_left.elements, len(S_left.elements))
+    Subsets_Right = subset_sums(S_right.elements, len(S_right.elements))
+    Sums_Left = []
+    Sums_Right = []
+    for j in Subsets_Left:
+        if j.sum == k:
+            print(j.elements)
+            return
+        Sums_Left.append(j.sum)
+    i = 0
+    for j in Subsets_Right:
+        if j.sum == k:
+            print(j.elements)
+            return
+        Sums_Right.append(j.sum)
+    Sums_Left.sort()
+    Sums_Right.sort()
+    p1, p2 = pair_sum(Sums_Left, Sums_Right, k)
+    if (p1 == -1 & p2 == -1):
+        print("No value found")
+    else:
+        v1 = Sums_Left[p1]
+        v2 = Sums_Right[p2]
+        final = []
+        for j in Subsets_Left:
+            if j.sum == v1:
+                final.append(j.elements)
+                break
+        for j in Subsets_Right:
+            if j.sum == v2:
+                final.append(j.elements)
+                break
+        print(final)
+        return
+
+
+
+def subset_sums(s, n):
+    subsets = []
+    subsets.append(empty_set)
+    for i in range(n):
+        new_subsets = []
+        for old_u in subsets:
+            add = old_u.elements.copy()
+            again = old_u.sum + s[i]
+            add.append(s[i])
+            new_u = Set(add, again)
+            new_subsets.append(old_u)
+            new_subsets.append(new_u)
+        subsets = new_subsets
+    return subsets
+
+
+def pair_sum(Values_1, Values_2, k):
+    p1 = 0
+    p2 = len(Values_2) - 1
+    while (p1 <= len(Values_1) & p2 >= 1):
+        t = Values_1[p1] + Values_2[p2]
+        if t ==k:
+            return (p1, p2)
+        elif t<k:
+            p1 += 1
+        else:
+            p2 -= 1
+    return (-1, -1)
+
+s = [12, 34, 23, 41, 12, 1, 2, 3, 4, 5, 6, 7, 9]
+n = len(s)
+k = 67
+empty_set = Set([],0)
+hs_subset_sums(s,k,n)
